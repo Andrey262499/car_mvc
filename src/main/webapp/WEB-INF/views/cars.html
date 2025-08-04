@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>CARS</title>
+</head>
+<body>
+<form method="get" action="/cars">
+    <label for="countInput">Number of cars to display:</label>
+    <input type="number" id="countInput" name="count" min="1">
+    <button type="submit">Показать машины</button>
+</form>
+<hr>
+
+<ul>
+    <li th:each="car : ${cars}">
+        <span th:text="${car.id}"></span>
+        <span th:text="${car.model}"></span>
+        (<span th:text="${car.series}"></span>)
+    </li>
+</ul>
+</body>
+</html>
