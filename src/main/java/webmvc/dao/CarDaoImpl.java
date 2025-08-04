@@ -6,31 +6,29 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import webmvc.model.Car;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
 public class CarDaoImpl implements CarDao {
+    private final List<Car> cars = new ArrayList<>();
 
-    @Autowired
-    private SessionFactory sessionFactory;
-
-    @Transactional
     @Override
     public List<Car> getCars() {
-        return sessionFactory.getCurrentSession().createQuery("from Car", Car.class).getResultList();
+        return new ArrayList<>(cars); // Возвращаем копию списка
     }
 
-    @Transactional
     @Override
     public List<Car> getCars(int count) {
-        if (count >= 5) {
-            return getCars();
+        List<Car> result = new ArrayList<>();
+        for (int i = 0; i < Math.min(count, cars.size()); i++) {
+            result.add(cars.get(i));
         }
-        return sessionFactory.getCurrentSession().createNativeQuery("select * from cars limit " + count, Car.class).getResultList();
+        return result;
     }
 
-    @Transactional
+    @Override
     public void saveCar(Car car) {
-        sessionFactory.getCurrentSession().save(car);
+        cars.add(car);
     }
 }
